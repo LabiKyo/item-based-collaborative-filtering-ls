@@ -5,7 +5,7 @@ require! {
 }
 
 exports = module.exports = (db, callback) ->
-  (err, rates-collection) <- db.collection \user-rate
+  err, rates-collection <- db.collection \user-rate
   handle err
 
   map = ->
@@ -20,20 +20,20 @@ exports = module.exports = (db, callback) ->
   finalize = (key, value) ->
     return value.rate / value.product
 
-  (err, average-rate-collection) <- rates-collection.map-reduce map, reduce, out: {replace: 'user-average-rate'}, finalize: finalize
+  err, average-rate-collection <- rates-collection.map-reduce map, reduce, out: {replace: 'user-average-rate'}, finalize: finalize
   handle err
 
   # add average rate into user collection
-  (err, rates-cursor) <- average-rate-collection.find {}
+  err, rates-cursor <- average-rate-collection.find {}
   handle err
-  (err, rates) <- rates-cursor.to-array!
-  handle err
-
-  (err, user-collection) <- db.collection \user
+  err, rates <- rates-cursor.to-array!
   handle err
 
-  (err, results) <- async.map rates, (rate, callback) ->
-    (err, doc) <- user-collection.find-and-modify do
+  err, user-collection <- db.collection \user
+  handle err
+
+  err, results <- async.map rates, (rate, callback) ->
+    err, doc <- user-collection.find-and-modify do
       * id: rate._id
       * [[\id, 1]]
       * $set: 'average-rate': rate.value

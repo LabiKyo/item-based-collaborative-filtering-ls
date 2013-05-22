@@ -9,6 +9,7 @@ require! {
 
   \./tasks/product-average
   \./tasks/user-average
+  \./tasks/user-product-rate
   handle: \./helper/error-handler
 }
 
@@ -41,9 +42,8 @@ task \init:db, "Initialize database", ->
   handle err
 
   <- user-average db
-  handle err
   <- product-average db
-  handle err
+  <- user-product-rate db
   db.close!
 
 task \update:user:average, "Calculate each users' average rate", ->
@@ -58,4 +58,11 @@ task \update:product:average, "Calculate each products' average rate", ->
   handle err
 
   <- product-average db
+  db.close!
+
+task \update:user:product-rate, "Calculate each users' rate on each product", ->
+  (err, db) <- db.open
+  handle err
+
+  <- user-product-rate db
   db.close!
