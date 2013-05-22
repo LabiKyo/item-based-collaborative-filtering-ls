@@ -2,6 +2,7 @@ require! {
   async
 
   handle: \../helper/error-handler
+  '../helper/collection'.find-to-array
 }
 
 exports = module.exports = (db, callback) ->
@@ -24,10 +25,7 @@ exports = module.exports = (db, callback) ->
   handle err
 
   # add average rate into product collection
-  err, rates-cursor <- average-rate-collection.find {}
-  handle err
-  err, rates <- rates-cursor.to-array!
-  handle err
+  rates <- find-to-array average-rate-collection, {}
 
   err, product-collection <- db.collection \product
   handle err

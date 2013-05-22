@@ -3,6 +3,7 @@ require! {
   _: underscore
 
   handle: \../helper/error-handler
+  '../helper/collection'.find-to-array
 }
 
 exports = module.exports = (db, callback) ->
@@ -12,20 +13,13 @@ exports = module.exports = (db, callback) ->
   err, users-collection <- db.collection \user
   handle err
 
-  err, users-cursor <- users-collection.find {}
-  handle err
-
-  err, users <- users-cursor.to-array!
-  handle err
+  users <- find-to-array users-collection, {}
 
   uids = _.map users, (user) ->
     user.id
 
   err <- async.each uids, (uid, callback) ->
-    err, rates-cursor <- rates-collection.find {uid: uid}
-    handle err
-    err, rates <- rates-cursor.to-array!
-    handle err
+    rates <- find-to-array rates-collection, {uid: uid}
 
     rates = _ rates
       .map (rate) ->
