@@ -1,7 +1,10 @@
+require! {
+  handle: \../helper/error-handler
+}
+
 exports = module.exports = (db, callback) ->
   (err, rates) <- db.collection \user-rate
-  if err
-    throw err
+  handle err
 
   map = ->
     emit @pid, rate: @rate, user: 1
@@ -16,6 +19,5 @@ exports = module.exports = (db, callback) ->
     return value.rate / value.user
 
   (err, average-rate) <- rates.map-reduce map, reduce, out: {replace: 'product-average-rate'}, finalize: finalize
-  if err
-    throw err
+  handle err
   callback err, average-rate
