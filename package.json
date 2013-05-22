@@ -1,0 +1,18 @@
+{
+  "name": "IBCF",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+  },
+  "dependencies": {
+    "mongodb": "*",
+    "async": "0.2.8",
+    "underscore": "*"
+  },
+  "devDependencies": {
+    "LiveScript": "1.1.1"
+  },
+  "engine": {
+    "node": ">=0.10.0"
+  }
+}
